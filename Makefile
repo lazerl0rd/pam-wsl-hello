@@ -9,11 +9,11 @@ pamLibrary:
 
 windowsHelloAuthComponent:
 	cd contrib/WindowsHelloAuthenticator && \
-	dotnet.exe msbuild -property:Configuration=Release -property:RuntimeIdentifiers=win10-x86
+	dotnet.exe msbuild -property:Configuration=Release -property:RuntimeIdentifiers=win10
 
 windowsHelloCredComponent:
 	cd contrib/WindowsHelloKeyCredentialCreator && \
-	dotnet.exe msbuild -property:Configuration=Release -property:RuntimeIdentifiers=win10-x86
+	dotnet.exe msbuild -property:Configuration=Release -property:RuntimeIdentifiers=win10
 
 clean:
 	cargo clean
