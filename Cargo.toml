@@ -1,7 +1,7 @@
 [package]
-name = "wsl_hello_pam"
-version = "1.1.0"
-authors = ["Takaya Saeki <abc.tkys+pub@gmail.com>"]
+name = "pam-wsl-hello"
+version = "0.1.0"
+authors = ["Takaya Saeki <abc.tkys+pub@gmail.com>", "Diab Neiroukh <lazerl0rd@thezest.dev>"]
 
 [lib]
 name = "pam_wsl_hello"
