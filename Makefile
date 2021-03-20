@@ -6,6 +6,11 @@ all:	pamLibrary \
 
 pamLibrary:
 	cargo build --release
+ifeq (, $(shell which llvm-strip))
+		strip --strip-unneeded target/release/libpam_wsl_hello.so
+else
+		llvm-strip --strip-unneeded target/release/libpam_wsl_hello.so
+endif
 
 windowsHelloAuthComponent:
 	cd contrib/WindowsHelloAuthenticator && \
