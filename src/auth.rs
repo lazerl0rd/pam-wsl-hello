@@ -90,9 +90,9 @@ impl fmt::Display for ConfigError {
         match *self {
             ConfigError::Io(ref ioerr) => write!(f, "{}", ioerr),
             ConfigError::Toml(_) => write!(f, "TOML format error"),
-            ConfigError::MissingField(_) => write!(f, "field: 'authenticator_path' is not found"),
-            ConfigError::InvalidValueType(_) => {
-                write!(f, "field: 'authenticator_path' has an invalid value type")
+            ConfigError::MissingField(ref field) => write!(f, "field: '{}' is not found", field),
+            ConfigError::InvalidValueType(ref field) => {
+                write!(f, "field: '{}' has an invalid value type", field)
             }
         }
     }
@@ -112,6 +112,20 @@ fn get_authenticator_path() -> Result<String, ConfigError> {
             "authenticator_path".to_owned(),
         ))?;
     Ok(authenticator_path.to_owned())
+}
+
+fn get_win_mnt() -> Result<String, ConfigError> {
+    let mut config_file = File::open("/etc/pam-wsl-hello/config")?;
+    let mut config = String::new();
+    config_file.read_to_string(&mut config)?;
+
+    let config_value = config.parse::<Value>()?;
+    let win_mnt = config_value
+        .get("win_mnt")
+        .ok_or(ConfigError::MissingField("win_mnt".to_owned()))?
+        .as_str()
+        .ok_or(ConfigError::InvalidValueType("win_mnt".to_owned()))?;
+    Ok(win_mnt.to_owned())
 }
 
 #[derive(Debug)]
@@ -206,7 +220,7 @@ fn authenticate_via_hello(pamh: *mut pam_handle_t) -> Result<i32, HelloAuthentic
         let authenticator_path = get_authenticator_path()?;
         let authenticator = Command::new(&authenticator_path)
             .arg(credential_key_name)
-            .current_dir("/mnt/c")
+            .current_dir(get_win_mnt()?)
             .stdin(challenge_tmpfile_in)
             .stdout(Stdio::piped())
             .spawn()
