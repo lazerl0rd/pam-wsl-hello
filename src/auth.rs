@@ -99,7 +99,7 @@ impl fmt::Display for ConfigError {
 }
 
 fn get_authenticator_path() -> Result<String, ConfigError> {
-    let mut config_file = File::open("/etc/pam_wsl_hello/config")?;
+    let mut config_file = File::open("/etc/pam-wsl-hello/config")?;
     let mut config = String::new();
     config_file.read_to_string(&mut config)?;
 
@@ -179,7 +179,7 @@ fn authenticate_via_hello(pamh: *mut pam_handle_t) -> Result<i32, HelloAuthentic
 
     let mut hello_public_key_file =
         File::open(format!(
-            "/etc/pam_wsl_hello/public_keys/{}.pem",
+            "/etc/pam-wsl-hello/public_keys/{}.pem",
             credential_key_name
         )).map_err(|io| HelloAuthenticationError::PublicKeyFileError(io))?;
     let mut key_str = String::new();
