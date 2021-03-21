@@ -26,3 +26,12 @@ clean:
 	dotnet.exe msbuild -target:Clean
 	cd contrib/WindowsHelloKeyCredentialCreator && \
 	dotnet.exe msbuild -target:Clean
+	rm -r out
+
+release: all
+	mkdir -p out
+	cp -f  target/release/libpam_wsl_hello.so out
+	cp -fr contrib/WindowsHelloAuthenticator/bin/Release out/WindowsHelloAuthenticator
+	cp -fr contrib/WindowsHelloKeyCredentialCreator/bin/Release out/WindowsHelloKeyCredentialCreator
+	cd out && \
+	tar -I zstd -cvf pam-wsl-hello.tar.zst *
